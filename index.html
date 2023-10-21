@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <title>Document</title>
+    <style>
+        .main {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .main input {
+            flex: 1;
+            font-size: 18px;
+            height: 40px;
+            padding: 0 20px;
+            outline: none;
+            border: 1px solid white;
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        .main input:focus {
+            border: 1px solid blue;
+        }
+
+        .main button {
+            height: 40px;
+            padding: 0 20px;
+            border: none;
+            background: blue;
+            color: white;
+            cursor: pointer;
+            margin-left: 20px;
+        }
+
+        .main button:nth-of-type(1) {
+            border: 1px solid blue;
+            color: blue;
+            background: white;
+        }
+
+        #result {
+            margin: 0 20px;
+            padding: 20px;
+        }
+
+        #result li {
+            list-style: none;
+            display: block;
+            margin: 10px 0;
+            cursor: pointer;
+            height: 30px;
+            line-height: 30px;
+        }
+
+        #result li span {
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        #result li:hover span {
+            font-weight: bold;
+            color: red;
+            font-size: 1.5em;
+            display: inline-block;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <input
+            type="text"
+            placeholder="请输入任意字符，EX:这是一个包含[1|2]和(3|4)符串"
+            id="inputVal"
+        />
+        <button onclick="fillText()">填入默认</button>
+        <button onclick="generateAnswer()">Test</button>
+    </div>
+    <div id="result"></div>
+</body>
+<script>
+    const resultDom = document.getElementById('result');
+    const inputVal = document.getElementById('inputVal');
+
+    function fillText(){
+        inputVal.value = '这是一个包含[1|2]和(3|4)符串';
+        generateAnswer();
+    }
+
+    function generateAnswer() {
+        let text = inputVal.value;
+        const regex = /\[([^\[\]]*)\]|\(([^()]*)\)/g;
+        const matches = text.match(regex);
+        if (matches) {
+            const result = [
+                [],
+                []
+            ];
+            matches.forEach(item => {
+                if (item.match(/\[([^\[\]]*)\]/)) {
+                    item = item.replace(/\[|\]/g, '');
+                    result[0].push(...item.split('|'));
+                } else {
+                    item = item.replace(/\(|\)/g, '');
+                    result[1].push(...item.split('|'));
+                }
+            })
+            result[0].push(...new Array(1).fill(''));
+            console.log(result)
+            let htmlResult = '';
+            result[0].forEach(v1 => {
+                result[1].forEach(v2 => {
+                    htmlResult += `<li>我要去<span>${v1 || '""'}</span>的地方吃<span>${v2}</span>可以吗？</li>`
+                })
+            })
+            resultDom.innerHTML = htmlResult;
+        } else {
+            alert("未找到匹配的部分");
+        }
+    }
+</script>
+
+</html>
