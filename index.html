@@ -113,8 +113,14 @@
                     result[1].push(...item.split('|'));
                 }
             })
-            result[0].push(...new Array(1).fill(''));
-            console.log(result)
+            if(result[0].length){
+                result[0].push(...new Array(1).fill(''));
+            }else{
+                alert('没有可以去的地方！')
+            }
+            if(!result[1].length){
+                alert('没有可以吃的东西！')
+            }
             let htmlResult = '';
             result[0].forEach(v1 => {
                 result[1].forEach(v2 => {
